@@ -1,0 +1,22 @@
+// Here you generate *JavaScript* that would be executed in the browser
+function refreshForm(innerHTML) {
+  const newReviewForm = document.getElementById('new_review');
+  newReviewForm.innerHTML = innerHTML;
+}
+
+function addReview(reviewHTML) {
+  const reviews = document.getElementById('reviews');
+  reviews.insertAdjacentHTML('beforeend', reviewHTML);
+}
+
+
+<% if @review.errors.any? %>
+  refreshForm('<%= j render "reviews/form", restaurant: @restaurant, review: @review %>');
+<% else %>
+  addReview('<%= j render "reviews/show", review: @review %>');
+  refreshForm('<%= j render "reviews/form", restaurant: @restaurant, review: Review.new %>');
+<% end %>
+
+// Produces this (when there are no errors):
+// addReview('<p>a comment that is very exciting!!!!<\/p>');
+// refreshForm('<form class=\"simple_form new_review\" id=\"new_review\" novalidate=\"novalidate\" action=\"/restaurants/2/reviews\" accept-charset=\"UTF-8\" data-remote=\"true\" method=\"post\"><input name=\"utf8\" type=\"hidden\" value=\"&#x2713;\" />\n  <div class=\"form-group text optional review_content\"><label class=\"text optional\" for=\"review_content\">Content<\/label><textarea class=\"form-control text optional\" name=\"review[content]\" id=\"review_content\">\n<\/textarea><\/div>\n  <input type=\"submit\" name=\"commit\" value=\"Create Review\" class=\"btn\" data-disable-with=\"Create Review\" />\n<\/form>');
